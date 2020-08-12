@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.NavigationState", "Blazor.NavigationState\Blazor.NavigationState.csproj", "{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.NavigationState.Tests", "Blazor.NavigationState.Tests\Blazor.NavigationState.Tests.csproj", "{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
