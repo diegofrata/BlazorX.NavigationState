@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     public interface INavigationParameter<T>
     {

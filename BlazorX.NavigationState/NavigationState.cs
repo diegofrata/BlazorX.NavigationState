@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using Flurl;
 using Microsoft.AspNetCore.Components;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     public interface INavigationState : IDisposable
     {

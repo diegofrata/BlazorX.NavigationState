@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace Blazor.NavigationState.Tests
+namespace BlazorX.NavigationState.Tests
 {
     [TestFixture]
     public class QueryPropertyTests

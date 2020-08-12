@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using NUnit.Framework;
 
-namespace Blazor.NavigationState.Tests
+namespace BlazorX.NavigationState.Tests
 {
     class TestNavigationManager : NavigationManager
     {

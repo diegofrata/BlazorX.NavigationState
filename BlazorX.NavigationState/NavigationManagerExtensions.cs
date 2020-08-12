@@ -5,7 +5,7 @@ using Flurl;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     static class NavigationManagerExtensions
     {

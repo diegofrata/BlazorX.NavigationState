@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Blazor.NavigationState\Blazor.NavigationState.csproj" />
+      <ProjectReference Include="..\BlazorX.NavigationState\BlazorX.NavigationState.csproj" />
     </ItemGroup>
 
 </Project>

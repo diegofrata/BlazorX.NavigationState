@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     public class QueryArray<T> : INavigationParameter<T[]>
     {

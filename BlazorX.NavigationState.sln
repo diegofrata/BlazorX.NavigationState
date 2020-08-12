@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.NavigationState", "Blazor.NavigationState\Blazor.NavigationState.csproj", "{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorX.NavigationState", "BlazorX.NavigationState\BlazorX.NavigationState.csproj", "{FCF68FD6-9989-4774-92DC-3738B9EAB2C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.NavigationState.Tests", "Blazor.NavigationState.Tests\Blazor.NavigationState.Tests.csproj", "{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorX.NavigationState.Tests", "BlazorX.NavigationState.Tests\BlazorX.NavigationState.Tests.csproj", "{10E8F27E-80C1-4A7E-A61F-F07793FDB0A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

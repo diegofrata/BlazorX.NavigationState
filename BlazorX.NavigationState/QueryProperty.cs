@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     public class QueryProperty<T> : INavigationParameter<T>
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Flurl;
 
-namespace Blazor.NavigationState
+namespace BlazorX.NavigationState
 {
     public static class ConversionUtils<T>
     {
