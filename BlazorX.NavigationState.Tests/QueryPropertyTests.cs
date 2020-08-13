@@ -92,15 +92,5 @@ namespace BlazorX.NavigationState.Tests
             
             Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&date=2020-08-13"));
         }
-
-        [Test]
-        public void Uses_the_setterTransformer()
-        {
-            var sut = _state.QueryProperty("p0", 0, x => x.Select(y => y * 20));
-            sut.Value = 50;
-
-            Assert.That(sut.Value, Is.EqualTo(1000));
-            Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&p0=1000"));
-        }
     }
 }

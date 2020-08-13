@@ -1,28 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 namespace BlazorX.NavigationState
 {
     abstract class QueryParameter<T> : IQueryParameter<T>
     {
-        readonly Subject<T> _updateSubject = new Subject<T>();
-        
+        readonly string? _format;
+
         protected QueryParameter(
             NavigationState state, 
             string key, 
-            T defaultValue, 
-            Func<IObservable<T>, IObservable<T>>? updateTransformer = null,
+            T defaultValue,
             string? format = null)
         {
+            _format = format;
             State = state;
             Key = key;
             DefaultValue = defaultValue;
-
-            updateTransformer ??= x => x;
-            updateTransformer(_updateSubject).Subscribe(v => SetQueryParameters(v, format));
         }
 
         protected NavigationState State { get; }
@@ -36,7 +31,7 @@ namespace BlazorX.NavigationState
         public T Value
         {
             get => GetQueryParameters();
-            set => _updateSubject.OnNext(value);
+            set => SetQueryParameters(value, _format);
         }
 
         public IObservable<T> ValueStream => State.Location.Select(x => Value).DistinctUntilChanged(Comparer);

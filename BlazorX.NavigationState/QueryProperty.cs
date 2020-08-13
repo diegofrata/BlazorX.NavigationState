@@ -9,8 +9,8 @@ namespace BlazorX.NavigationState
     {
         public static implicit operator T(QueryProperty<T> d) => d.Value;
 
-        public QueryProperty(NavigationState state, string key, T defaultValue, Func<IObservable<T>, IObservable<T>>? updateTransformer = null, string? format = null) 
-            : base(state, key, defaultValue, updateTransformer, format)
+        public QueryProperty(NavigationState state, string key, T defaultValue, string? format = null) 
+            : base(state, key, defaultValue, format)
         {
         }
 

@@ -11,13 +11,11 @@ namespace BlazorX.NavigationState
         IQueryParameter<T> QueryProperty<T>(
             string key,
             T defaultValue = default,
-            Func<IObservable<T>, IObservable<T>>? setterTransformer = null,
             string? format = null);
 
         IQueryParameter<T[]> QueryArray<T>(
             string key,
             T[] defaultValue,
-            Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null,
             string? format = null);
     }
 
@@ -33,9 +31,10 @@ namespace BlazorX.NavigationState
             _location = new BehaviorSubject<Url>(new Url(manager.Uri));
             _subscription = manager.LocationStream().Subscribe(_location);
         }
-        
+
         internal IObservable<Url> Location => _location;
         internal IReadOnlyList<QueryParameter> GetQueryParameters(string key) => _location.Value.QueryParams.FindAll(x => x.Name == key);
+
         internal void SetQueryParameters(string key, object? value)
         {
             var newUrl = _location.Value.Clone();
@@ -44,21 +43,19 @@ namespace BlazorX.NavigationState
         }
 
         public IQueryParameter<T> QueryProperty<T>(
-            string key, 
-            T defaultValue = default, 
-            Func<IObservable<T>, IObservable<T>>? setterTransformer = null, 
+            string key,
+            T defaultValue = default,
             string? format = null)
         {
-            return new QueryProperty<T>(this, key, defaultValue, setterTransformer, format);
+            return new QueryProperty<T>(this, key, defaultValue, format);
         }
 
         public IQueryParameter<T[]> QueryArray<T>(
-            string key, 
-            T[] defaultValue, 
-            Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null, 
+            string key,
+            T[] defaultValue,
             string? format = null)
         {
-            return new QueryArray<T>(this, key, defaultValue, setterTransformer, format);
+            return new QueryArray<T>(this, key, defaultValue, format);
         }
 
         public void Dispose()

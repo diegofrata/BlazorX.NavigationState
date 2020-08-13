@@ -9,8 +9,8 @@ namespace BlazorX.NavigationState
     {
         readonly string _emptyKey;
 
-        public QueryArray(NavigationState state, string key, T[] defaultValue, Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null, string? format = null)
-            : base(state, key, defaultValue, setterTransformer, format)
+        public QueryArray(NavigationState state, string key, T[] defaultValue, string? format = null)
+            : base(state, key, defaultValue, format)
         {
             _emptyKey = $"{Key}:empty";
         }
