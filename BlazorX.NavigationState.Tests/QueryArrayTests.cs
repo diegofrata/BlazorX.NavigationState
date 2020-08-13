@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using NUnit.Framework;
 
 namespace BlazorX.NavigationState.Tests
@@ -82,6 +84,26 @@ namespace BlazorX.NavigationState.Tests
             Assert.That(list[1], Is.EqualTo(new [] { 10 }).AsCollection);
             Assert.That(list[2], Is.EqualTo(new [] { 10, 20 }).AsCollection);
             Assert.That(list[3], Is.EqualTo(new [] { 20, 30 }).AsCollection);
+        }
+        
+        [Test]
+        public void Writes_using_provided_format()
+        {
+            var sut = _state.QueryArray("dates", new DateTime[0], format: "yyyy-MM-dd");
+            sut.Value = new[] { new DateTime(2020, 8, 13), new DateTime(2020, 8, 14) };
+            
+            Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&dates=2020-08-13&dates=2020-08-14"));
+        }
+        
+        
+        [Test]
+        public void Uses_the_setterTransformer()
+        {
+            var sut = _state.QueryArray("p0", Array.Empty<int>(), x => x.Select(y => y.Select(z => z * 20).ToArray()));
+            sut.Value = new [] { 10, 20 };
+
+            Assert.That(sut.Value, Is.EqualTo(new [] { 200, 400 }).AsCollection);
+            Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&p0=200&p0=400"));
         }
     }
 }

@@ -1,38 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
 
 namespace BlazorX.NavigationState
 {
-    public class QueryProperty<T> : INavigationParameter<T>
+    class QueryProperty<T> : QueryParameter<T>
     {
         public static implicit operator T(QueryProperty<T> d) => d.Value;
 
-        readonly NavigationState _state;
-        readonly string _key;
-        readonly T _defaultValue;
-
-        public QueryProperty(NavigationState state, string key, T defaultValue)
+        public QueryProperty(NavigationState state, string key, T defaultValue, Func<IObservable<T>, IObservable<T>>? updateTransformer = null, string? format = null) 
+            : base(state, key, defaultValue, updateTransformer, format)
         {
-            _state = state;
-            _key = key;
-            _defaultValue = defaultValue;
         }
 
-        public T Value
+        protected override void SetQueryParameters(T v, string? format)
         {
-            get
-            {
-                var parameter = _state.GetQueryParameters(_key).FirstOrDefault();
+            object? boxedValue = v;
 
-                if (parameter?.Value == null)
-                    return _defaultValue;
-
-                return ConversionUtils<T>.Convert(parameter);
-            }
-            set => _state.SetQueryParameters(_key, value);
+            if (boxedValue is IFormattable f)
+                boxedValue = f.ToString(format, CultureInfo.InvariantCulture);
+            
+            State.SetQueryParameters(Key, boxedValue);
         }
 
-        public IObservable<T> ValueStream => _state.Location.Select(x => Value).DistinctUntilChanged();
+        protected override T GetQueryParameters()
+        {
+            var parameter = State.GetQueryParameters(Key).FirstOrDefault();
+            return parameter?.Value == null ? DefaultValue : ConversionUtils<T>.Convert(parameter);
+        }
+
+        protected override IEqualityComparer<T> Comparer { get; } = EqualityComparer<T>.Default;
     }
 }

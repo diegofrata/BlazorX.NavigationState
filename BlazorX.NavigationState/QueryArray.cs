@@ -1,54 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
 
 namespace BlazorX.NavigationState
 {
-    public class QueryArray<T> : INavigationParameter<T[]>
+    class QueryArray<T> : QueryParameter<T[]>
     {
-        public static implicit operator T[](QueryArray<T> d) => d.Value;
-
-        readonly NavigationState _state;
-        readonly string _key;
-        readonly T[] _defaultValue;
         readonly string _emptyKey;
 
-        public QueryArray(NavigationState state, string key, T[] defaultValue)
+        public QueryArray(NavigationState state, string key, T[] defaultValue, Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null, string? format = null)
+            : base(state, key, defaultValue, setterTransformer, format)
         {
-            _state = state;
-            _key = key;
-            _emptyKey = $"{_key}:empty";
-            _defaultValue = defaultValue;
+            _emptyKey = $"{Key}:empty";
         }
 
-        public T[] Value
+        protected override void SetQueryParameters(T[] v, string? format)
         {
-            get
-            {
-                var parameters = _state.GetQueryParameters(_key);
+            State.SetQueryParameters(Key, v.Select(x => x is IFormattable f ? (object) f.ToString(format, CultureInfo.InvariantCulture) : x));
+            State.SetQueryParameters(_emptyKey, v.Length == 0 ? "" : null);
+        }
 
-                if (parameters.Count == 0)
-                {
-                    var emptyParameters = _state.GetQueryParameters(_emptyKey);
-                    return emptyParameters.Any() ? Array.Empty<T>() : _defaultValue;
-                }
+        protected override T[] GetQueryParameters()
+        {
+            var parameters = State.GetQueryParameters(Key);
 
+            if (parameters.Count != 0)
                 return parameters.Select(x => ConversionUtils<T>.Convert(x)).ToArray();
-            }
-            set
-            {
-                _state.SetQueryParameters(_key, value);
-                _state.SetQueryParameters(_emptyKey, value.Length == 0 ? "" : null);
-            }
+
+            var emptyParameters = State.GetQueryParameters(_emptyKey);
+            return emptyParameters.Any() ? Array.Empty<T>() : DefaultValue;
         }
 
-        public IObservable<T[]> ValueStream => _state.Location.Select(x => Value).DistinctUntilChanged(SequenceEqualityComparer.Instance);
-        
+        protected override IEqualityComparer<T[]> Comparer { get; } = SequenceEqualityComparer.Instance;
+
         class SequenceEqualityComparer : IEqualityComparer<T[]>
         {
             public static readonly SequenceEqualityComparer Instance = new SequenceEqualityComparer();
-            
+
             public bool Equals(T[] x, T[] y) => x.SequenceEqual(y);
 
             public int GetHashCode(T[] obj) => 0;

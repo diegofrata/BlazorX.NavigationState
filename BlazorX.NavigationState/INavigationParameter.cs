@@ -8,4 +8,9 @@ namespace BlazorX.NavigationState
         
         public IObservable<T> ValueStream { get; }
     }
+
+    public interface IQueryParameter<T> : INavigationParameter<T>
+    {
+        
+    }
 }

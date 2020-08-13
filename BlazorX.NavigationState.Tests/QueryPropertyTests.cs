@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using NUnit.Framework;
 
 namespace BlazorX.NavigationState.Tests
@@ -81,6 +82,25 @@ namespace BlazorX.NavigationState.Tests
             sut.Value = 30;
             
             Assert.That(list, Is.EqualTo(new [] { 0, 10, 30}).AsCollection);
+        }
+
+        [Test]
+        public void Writes_using_provided_format()
+        {
+            var sut = _state.QueryProperty("date", DateTime.MinValue, format: "yyyy-MM-dd");
+            sut.Value = new DateTime(2020, 8, 13);
+            
+            Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&date=2020-08-13"));
+        }
+
+        [Test]
+        public void Uses_the_setterTransformer()
+        {
+            var sut = _state.QueryProperty("p0", 0, x => x.Select(y => y * 20));
+            sut.Value = 50;
+
+            Assert.That(sut.Value, Is.EqualTo(1000));
+            Assert.That(_location, Is.EqualTo("http://domain/path?p1=10&p0=1000"));
         }
     }
 }

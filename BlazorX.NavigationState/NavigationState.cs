@@ -8,8 +8,17 @@ namespace BlazorX.NavigationState
 {
     public interface INavigationState : IDisposable
     {
-        QueryProperty<T> QueryProperty<T>(string key, T defaultValue);
-        QueryArray<T> QueryArray<T>(string key, T[] defaultValue);
+        IQueryParameter<T> QueryProperty<T>(
+            string key,
+            T defaultValue = default,
+            Func<IObservable<T>, IObservable<T>>? setterTransformer = null,
+            string? format = null);
+
+        IQueryParameter<T[]> QueryArray<T>(
+            string key,
+            T[] defaultValue,
+            Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null,
+            string? format = null);
     }
 
     public class NavigationState : INavigationState
@@ -34,10 +43,23 @@ namespace BlazorX.NavigationState
             _manager.NavigateTo(newUrl);
         }
 
-        public QueryProperty<T> QueryProperty<T>(string key, T defaultValue = default) =>
-            new QueryProperty<T>(this, key, defaultValue);
-        
-        public QueryArray<T> QueryArray<T>(string key, T[] defaultValue) => new QueryArray<T>(this, key, defaultValue);
+        public IQueryParameter<T> QueryProperty<T>(
+            string key, 
+            T defaultValue = default, 
+            Func<IObservable<T>, IObservable<T>>? setterTransformer = null, 
+            string? format = null)
+        {
+            return new QueryProperty<T>(this, key, defaultValue, setterTransformer, format);
+        }
+
+        public IQueryParameter<T[]> QueryArray<T>(
+            string key, 
+            T[] defaultValue, 
+            Func<IObservable<T[]>, IObservable<T[]>>? setterTransformer = null, 
+            string? format = null)
+        {
+            return new QueryArray<T>(this, key, defaultValue, setterTransformer, format);
+        }
 
         public void Dispose()
         {
