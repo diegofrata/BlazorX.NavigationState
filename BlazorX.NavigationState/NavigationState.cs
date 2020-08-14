@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Flurl;
@@ -9,9 +10,6 @@ namespace BlazorX.NavigationState
 {
     public interface INavigationState : IDisposable
     {
-        event AsyncEventHandler<Url>? BeforeNavigate;
-        event AsyncEventHandler<Url>? AfterNavigate;
-
         IQueryParameter<T> QueryProperty<T>(
             string key,
             T defaultValue = default,
@@ -33,22 +31,22 @@ namespace BlazorX.NavigationState
         {
             _manager = manager;
             _location = new BehaviorSubject<Url>(new Url(manager.Uri));
-            _subscription = manager.LocationStream().Subscribe(_location);
+            _subscription = manager.LocationStream().DistinctUntilChanged().Subscribe(_location);
         }
 
         internal IObservable<Url> Location => _location;
         internal IReadOnlyList<QueryParameter> GetQueryParameters(string key) => _location.Value.QueryParams.FindAll(x => x.Name == key);
-        public event AsyncEventHandler<Url>? BeforeNavigate;
-        public event AsyncEventHandler<Url>? AfterNavigate;
 
-        internal async Task SetQueryParameters(string key, object? value)
+        internal void SetQueryParameters(string key, object? value)
         {
-            var newUrl = _location.Value.Clone();
+            var currentUrl = _location.Value;
+            var newUrl = currentUrl.Clone();
             newUrl.SetQueryParam(key, value);
+            
+            if (currentUrl.Equals(newUrl))
+                return;
 
-            await (BeforeNavigate?.InvokeAllAsync(this, newUrl) ?? Task.CompletedTask);
             _manager.NavigateTo(newUrl);
-            await (AfterNavigate?.InvokeAllAsync(this, newUrl) ?? Task.CompletedTask);
         }
 
         public IQueryParameter<T> QueryProperty<T>(

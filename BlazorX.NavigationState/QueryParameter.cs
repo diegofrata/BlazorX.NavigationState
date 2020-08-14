@@ -25,7 +25,7 @@ namespace BlazorX.NavigationState
         protected string Key { get; }
         protected T DefaultValue { get; }
         
-        protected abstract Task SetQueryParameters(T v, string? format);
+        protected abstract void SetQueryParameters(T v, string? format);
         protected abstract T GetQueryParameters();
         protected abstract IEqualityComparer<T> Comparer { get; }
 

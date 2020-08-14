@@ -16,10 +16,10 @@ namespace BlazorX.NavigationState
             _emptyKey = $"{Key}:empty";
         }
 
-        protected override async Task SetQueryParameters(T[] v, string? format)
+        protected override void SetQueryParameters(T[] v, string? format)
         {
-            await State.SetQueryParameters(Key, v.Select(x => x is IFormattable f ? (object) f.ToString(format, CultureInfo.InvariantCulture) : x));
-            await State.SetQueryParameters(_emptyKey, v.Length == 0 ? "" : null);
+            State.SetQueryParameters(Key, v.Select(x => x is IFormattable f ? (object) f.ToString(format, CultureInfo.InvariantCulture) : x));
+            State.SetQueryParameters(_emptyKey, v.Length == 0 ? "" : null);
         }
 
         protected override T[] GetQueryParameters()

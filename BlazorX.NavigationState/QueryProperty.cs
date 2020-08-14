@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlazorX.NavigationState
 {
@@ -15,14 +14,14 @@ namespace BlazorX.NavigationState
         {
         }
 
-        protected override async Task SetQueryParameters(T v, string? format)
+        protected override void SetQueryParameters(T v, string? format)
         {
             object? boxedValue = v;
 
             if (boxedValue is IFormattable f)
                 boxedValue = f.ToString(format, CultureInfo.InvariantCulture);
             
-            await State.SetQueryParameters(Key, boxedValue);
+            State.SetQueryParameters(Key, boxedValue);
         }
 
         protected override T GetQueryParameters()
