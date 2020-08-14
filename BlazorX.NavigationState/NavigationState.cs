@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Components;
 namespace BlazorX.NavigationState
 {
     public interface INavigationState : IDisposable
-    {
+    {        
+        event EventHandler<Url>? BeforeNavigate;
+        event EventHandler<Url>? AfterNavigate;
+        
         IQueryParameter<T> QueryProperty<T>(
             string key,
             T defaultValue = default,
@@ -34,12 +37,17 @@ namespace BlazorX.NavigationState
 
         internal IObservable<Url> Location => _location;
         internal IReadOnlyList<QueryParameter> GetQueryParameters(string key) => _location.Value.QueryParams.FindAll(x => x.Name == key);
+        public event EventHandler<Url>? BeforeNavigate;
+        public event EventHandler<Url>? AfterNavigate;
 
         internal void SetQueryParameters(string key, object? value)
         {
             var newUrl = _location.Value.Clone();
             newUrl.SetQueryParam(key, value);
+            
+            BeforeNavigate?.Invoke(this, newUrl);
             _manager.NavigateTo(newUrl);
+            AfterNavigate?.Invoke(this, newUrl);
         }
 
         public IQueryParameter<T> QueryProperty<T>(
