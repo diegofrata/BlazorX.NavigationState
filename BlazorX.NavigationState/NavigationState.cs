@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using Flurl;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorX.NavigationState
 {
     public interface INavigationState : IDisposable
-    {        
-        event EventHandler<Url>? BeforeNavigate;
-        event EventHandler<Url>? AfterNavigate;
-        
+    {
+        event AsyncEventHandler<Url>? BeforeNavigate;
+        event AsyncEventHandler<Url>? AfterNavigate;
+
         IQueryParameter<T> QueryProperty<T>(
             string key,
             T defaultValue = default,
@@ -27,7 +28,7 @@ namespace BlazorX.NavigationState
         readonly NavigationManager _manager;
         readonly IDisposable _subscription;
         readonly BehaviorSubject<Url> _location;
-
+        
         public NavigationState(NavigationManager manager)
         {
             _manager = manager;
@@ -37,17 +38,17 @@ namespace BlazorX.NavigationState
 
         internal IObservable<Url> Location => _location;
         internal IReadOnlyList<QueryParameter> GetQueryParameters(string key) => _location.Value.QueryParams.FindAll(x => x.Name == key);
-        public event EventHandler<Url>? BeforeNavigate;
-        public event EventHandler<Url>? AfterNavigate;
+        public event AsyncEventHandler<Url>? BeforeNavigate;
+        public event AsyncEventHandler<Url>? AfterNavigate;
 
-        internal void SetQueryParameters(string key, object? value)
+        internal async Task SetQueryParameters(string key, object? value)
         {
             var newUrl = _location.Value.Clone();
             newUrl.SetQueryParam(key, value);
-            
-            BeforeNavigate?.Invoke(this, newUrl);
+
+            await (BeforeNavigate?.InvokeAllAsync(this, newUrl) ?? Task.CompletedTask);
             _manager.NavigateTo(newUrl);
-            AfterNavigate?.Invoke(this, newUrl);
+            await (AfterNavigate?.InvokeAllAsync(this, newUrl) ?? Task.CompletedTask);
         }
 
         public IQueryParameter<T> QueryProperty<T>(

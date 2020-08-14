@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace BlazorX.NavigationState
 {
@@ -24,7 +25,7 @@ namespace BlazorX.NavigationState
         protected string Key { get; }
         protected T DefaultValue { get; }
         
-        protected abstract void SetQueryParameters(T v, string? format);
+        protected abstract Task SetQueryParameters(T v, string? format);
         protected abstract T GetQueryParameters();
         protected abstract IEqualityComparer<T> Comparer { get; }
 

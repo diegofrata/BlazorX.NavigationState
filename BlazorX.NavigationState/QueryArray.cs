@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlazorX.NavigationState
 {
@@ -15,10 +16,10 @@ namespace BlazorX.NavigationState
             _emptyKey = $"{Key}:empty";
         }
 
-        protected override void SetQueryParameters(T[] v, string? format)
+        protected override async Task SetQueryParameters(T[] v, string? format)
         {
-            State.SetQueryParameters(Key, v.Select(x => x is IFormattable f ? (object) f.ToString(format, CultureInfo.InvariantCulture) : x));
-            State.SetQueryParameters(_emptyKey, v.Length == 0 ? "" : null);
+            await State.SetQueryParameters(Key, v.Select(x => x is IFormattable f ? (object) f.ToString(format, CultureInfo.InvariantCulture) : x));
+            await State.SetQueryParameters(_emptyKey, v.Length == 0 ? "" : null);
         }
 
         protected override T[] GetQueryParameters()
